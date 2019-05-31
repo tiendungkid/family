@@ -1,74 +1,97 @@
-const express = require("express");
+const cf_path = "./config/";
+const validate_path = "./Validate/";
 const io = require("socket.io");
-const mysql = require("mysql");
 const fs = require("fs");
-const bodyParser = require("body-parser");
-const session = require('express-session');
-const md5 = require('md5');
-const validate = require("./Validate/createuser.js");
+const validate = require(validate_path+'mainvl.js');
+const connectSQL = require(cf_path+'dbcf.js');
+const app = require(cf_path+'appcf.js');
+app.use(require('express').static(__dirname + '/public'));
 /*
  * CreateServer
  */
-const app = express();
-const server = require("http").Server(app).listen(process.env.PORT || 3000,()=>{
+ const server = require("http").Server(app).listen(process.env.PORT || 3000,()=>{
   console.log("LISTEN - * - 3000");
-});
-/*
- * Set env
- */
-app.use(express.static(__dirname + '/public'));
-app.set('view engine', 'ejs');
-app.set('views','./view/view');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.json())
-app.use(session({
-  secret: 'tiendungkid',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-      secure: false,
-      maxAge: 3600000
-  }
-}));
-const connectSQL = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    pass: "",
-    database: "family"
-});
-connectSQL.connect((err)=>{
-    if (err) console.log(err);
-    else console.log("Connect DB -*- SUCCESS");
-});
+ });
  /*
   * Get router
   */
-app.get('/',(req,res)=>{
-  let user = req.query.user;
-  let pass = req.query.pass;
-  let date = req.query.date;
-  let key = req.query.key;
-  let sql = `INSERT INTO tb_user(user_name,pass_wd,date,key_of_pass,group_id) `+`VALUES('` + user + `','` + md5(pass) + `','` + date + `','` + key + `', 1)`;
-  /*Validate*/
-  let test = validate.vl(user,pass,date,key,1);
-  test.then(data =>{
-      console.log(data);
-      /*Check inserted*/
-      let inserted = new Promise((resolve, reject) => {
-          connectSQL.query(sql,(err, data)=>{
-              if (err) return reject(err);
-              data.ststus = "success";
-              return resolve(data);
-          });
-      });
-      inserted.then(data => res.send(data),err =>{
-          err.sqlMessage = undefined;
-          err.sql = undefined;
-          res.send(err);
-      });
-  } ,err =>{
-      console.log(err);
-      res.send(err);
+  /*Create user Process*/
+  app.post('/cruser',(req,res)=>{
+    if (req.session.user_id && req.session.user_name) res.render("extend/loadingpage.ejs");
+    let user = req.body.user ? req.body.user : req.query.user;
+    let pass = req.body.pass ? req.body.pass : req.query.pass;
+    let date = req.body.date ? req.body.date : req.query.date;
+    let key = req.body.key ? req.body.key : req.query.key;
+    /*Validate*/
+    let test = validate.vl(user,pass,date,key,1);
+    test.then(
+      data =>{
+        console.log(data);
+        /*Check inserted*/
+        let inserted = new Promise((resolve, reject) => {
+            let sql = validate.crsql(user,pass,date,key,1);
+            connectSQL.query(sql,(err, data)=>{
+                if (err) return reject(err);
+                data.ststus = "Add-success";
+                return resolve(data);
+            });
+        });
+        inserted.then(data => res.send(data),err =>{
+            err.sqlMessage = undefined;
+            err.sql = undefined;
+            res.send(err);
+        });
+      },
+    err =>{
+        console.log(err);
+        res.send(err);
+    });
   });
-});
+  /*Login Process */
+  app.post('/',(req,res)=>{
+    if (req.session.user_id && req.session.user_name) res.render("extend/loadingpage.ejs");
+    else{
+        let user = req.body.user ? req.body.user: req.query.user;
+        let pass = req.body.pass ? req.body.pass: req.query.pass;
+        let check = validate.checklogin(user,pass);
+        if(!check){console.log("RegExp redirect..."); res.render('main/login.ejs');}
+        else{
+          let sql = validate.loginsql(user,pass);
+          connectSQL.query(sql,(err, data)=>{
+            if(err){
+              console.log("SQL redirect...");
+              res.render("main/login.ejs");
+            }else{
+              if (err) res.render("main/login.ejs");
+              if (data.length===1){
+                  req.session.user_id = data[0].id;
+                  req.session.user_name = data[0].user_name;
+                  req.session.user_date = data[0].date;
+                  console.log("Login Success...");
+                  res.render("extend/loadingpage.ejs");
+              }else{
+                console.log("User And Password incorrect...");
+                res.render("main/login.ejs");
+              }
+            }
+          });
+    }
+  }
+  });
+  /*Login Page*/
+  app.get('/',(req,res)=>{
+      if (!req.session.user_id && !req.session.user_name) res.render("main/login.ejs");
+      else res.render("extend/loadingpage.ejs");
+  });
+  /*LogOut Page */
+  app.get('/logout',(req,res)=>{
+    req.session.destroy((err)=>{
+        if (err) console.log(err);
+        else console.log("Logouted...");
+        res.redirect('/');
+    });
+  });
+  /*Loadding page*/
+  app.get('/loading',(req,res)=>{
+    res.render("extend/loadingpage.ejs");
+  });
