@@ -56,27 +56,37 @@ app.use(require('express').static(__dirname + '/public'));
         let check = validate.checklogin(user,pass);
         if(!check){console.log("RegExp redirect..."); res.render('main/login.ejs');}
         else{
-          let sql = validate.loginsql(user,pass);
-          connectSQL.query(sql,(err, data)=>{
-            if(err){
-              console.log("SQL redirect...");
-              res.render("main/login.ejs");
-            }else{
-              if (err) res.render("main/login.ejs");
-              if (data.length===1){
-                  req.session.user_id = data[0].id;
-                  req.session.user_name = data[0].user_name;
-                  req.session.user_date = data[0].date;
-                  console.log("Login Success...");
-                  res.render("extend/loadingpage.ejs");
-              }else{
-                console.log("User And Password incorrect...");
-                res.render("main/login.ejs");
-              }
-            }
-          });
+          // let sql = validate.loginsql(user,pass);
+          // connectSQL.query(sql,(err, data)=>{
+          //   if(err){
+          //     console.log("SQL redirect...");
+          //     res.render("main/login.ejs");
+          //   }else{
+          //     if (err) res.render("main/login.ejs");
+          //     if (data.length===1){
+          //         req.session.user_id = data[0].id;
+          //         req.session.user_name = data[0].user_name;
+          //         req.session.user_date = data[0].date;
+          //         console.log("Login Success...");
+          //         res.render("extend/loadingpage.ejs");
+          //     }else{
+          //       console.log("User And Password incorrect...");
+          //       res.render("main/login.ejs");
+          //     }
+          //   }
+          // });
+          if(user==="tiendungkid"&&pass==="Dungpro1"){
+            req.session.user_id = "1";
+            req.session.user_name = user;
+            req.session.user_date = "29/11/1999";
+            console.log("Login Success...");
+            res.render("extend/loadingpage.ejs");
+          }else{
+            console.log("User And Password incorrect...");
+            res.render("main/login.ejs");
+          }
+      }
     }
-  }
   });
   /*Login Page*/
   app.get('/',(req,res)=>{
@@ -95,3 +105,10 @@ app.use(require('express').static(__dirname + '/public'));
   app.get('/loading',(req,res)=>{
     res.render("extend/loadingpage.ejs");
   });
+/*
+ * Calculator time go to sleep
+ */
+ app.get('/calculatortime',(req,res)=>{
+   if(!validate.isLogin(req)) res.redirect("/");
+   res.render("main/calculatortime.ejs");
+ });

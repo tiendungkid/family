@@ -30,6 +30,10 @@ let validate = {
             if (!regex.test(u)) return false;
             if (!regex.test(p)) return false;
             return true;
+    },
+    isLogin : (req)=>{
+        if(!req.session.user_id && !req.session.user_name) return false;
+        return true;
     }
 };
 let getLength = v => v.length;
