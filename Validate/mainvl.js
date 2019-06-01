@@ -1,5 +1,6 @@
 const md5 = require("md5");
 let validate = {
+    regexABC: RegExp(/^[a-zA-Z0-9]{3,30}/),
     vl : (u,p,d,k,g)=>{
           return new Promise((resolve, reject)=>{
             if (u===undefined||p===undefined||d===undefined||k===undefined||g===undefined)return reject({st: false,err:"Vui Lòng nhập đủ thông tin"});
@@ -34,6 +35,28 @@ let validate = {
     isLogin : (req)=>{
         if(!req.session.user_id && !req.session.user_name) return false;
         return true;
+    },
+    getRedirect : (path,pageName)=>{
+        return {
+                pathname: path,
+                query:{
+                        "pagename": pageName
+                }
+        }
+    },
+    checkPrepage: (page)=>{
+        if(page===undefined||page===""){
+                return true;
+        }
+        if(page==="main"){
+                return true;
+        }
+        return true;
+    },
+    createPrepage: (prepage)=>{
+        return {
+                prepage: prepage
+        }
     }
 };
 let getLength = v => v.length;
