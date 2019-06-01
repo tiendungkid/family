@@ -13,7 +13,7 @@ $(document).ready(()=>{
         }else{
             if(confirm(total)){
                 let DateNow = new Date();
-                let currentTime = new Date(DateNow.getFullYear() + "-" + DateNow.getMonth() + "-" + DateNow.getDate() + " " + start + ":00");
+                let currentTime = new Date(DateNow.getFullYear() + "/" + DateNow.getMonth() + "/" + DateNow.getDate() + " " + start + ":00");
                 reload = (reload * 90) + parseInt(gosleep);
                 let totalMin = reload + (currentTime.getHours() * 60) + currentTime.getMinutes();
                 let hours = parseInt(totalMin/60);
@@ -23,7 +23,7 @@ $(document).ready(()=>{
                     du  = parseFloat(du);
                 let minutes = du*60;
                 alert("Bạn cần thức dậy lúc "+hours + "H:" + parseInt(minutes) + " Phút !");
-            }else alert("Đã hủy tính toán !");
+            }else {alert("Đã hủy tính toán !");}
         }
     });
 });

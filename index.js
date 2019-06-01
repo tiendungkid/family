@@ -90,8 +90,8 @@ app.use(require('express').static(__dirname + '/public'));
   });
   /*Login Page*/
   app.get('/',(req,res)=>{
-      if (!req.session.user_id && !req.session.user_name) res.render("main/login.ejs");
-      else res.render("extend/loadingpage.ejs");
+      if (!req.session.user_id && !req.session.user_name){res.render("main/login.ejs");}
+      else {res.reder("extend/loadingpage.ejs");}
   });
   /*LogOut Page */
   app.get('/logout',(req,res)=>{
@@ -109,6 +109,6 @@ app.use(require('express').static(__dirname + '/public'));
  * Calculator time go to sleep
  */
  app.get('/calculatortime',(req,res)=>{
-   if(!validate.isLogin(req)) res.redirect("/");
-   res.render("main/calculatortime.ejs");
+   if(!validate.isLogin(req)){res.redirect("/");}
+   else{res.render("main/calculatortime.ejs");}
  });
