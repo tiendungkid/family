@@ -96,7 +96,7 @@ app.use(require('express').static(__dirname + '/public'));
   /*Login Page*/
   app.get('/',(req,res)=>{
       if (!req.session.user_id && !req.session.user_name){
-        let prepage = req.query.pagename ? req.query.pagename : "test";
+        let prepage = req.query.pagename ? req.query.pagename : "calculatortime";
         res.render("main/login",validate.createPrepage(prepage));
       }
       else {res.render("extend/loadingpage",{router: "test"});}
