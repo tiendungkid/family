@@ -52,7 +52,7 @@ app.use(require('express').static(__dirname + '/public'));
   /*Login Process */
   app.post('/',(req,res)=>{
     if (req.session.user_id && req.session.user_name){
-      res.render("extend/loadingpage",{router: "test2"});
+      res.render("extend/loadingpage",{router: "musicrelax"});
     }
     else{
         let user = req.body.user ? req.body.user: req.query.user;
@@ -99,7 +99,7 @@ app.use(require('express').static(__dirname + '/public'));
         let prepage = req.query.pagename ? req.query.pagename : "calculatortime";
         res.render("main/login",validate.createPrepage(prepage));
       }
-      else {res.render("extend/loadingpage",{router: "test"});}
+      else {res.render("extend/loadingpage",{router: "musicrelax"});}
   });
   /*LogOut Page */
   app.get('/logout',(req,res)=>{
@@ -135,10 +135,10 @@ app.use(require('express').static(__dirname + '/public'));
     res.send("test");
   }
  });
- app.get('/test2',(req,res)=>{
+ app.get('/musicrelax',(req,res)=>{
     if(!validate.isLogin(req)){
-      res.redirect(url.format(validate.getRedirect('/','test2')));
+      res.redirect(url.format(validate.getRedirect('/','musicrelax')));
     }else{
-      res.send("test2");
+      res.render("main/musicrelax");
     }
  });
