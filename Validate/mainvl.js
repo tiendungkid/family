@@ -1,4 +1,5 @@
 const md5 = require("md5");
+const fs = require("fs");
 let validate = {
     regexABC: RegExp(/^[a-zA-Z0-9]{3,30}/),
     vl : (u,p,d,k,g)=>{
@@ -57,6 +58,33 @@ let validate = {
         return {
                 prepage: prepage
         }
+    },
+    getSSL : {
+        key: fs.readFileSync('./security/server.key'),
+        cert: fs.readFileSync('./security/server.cert')
+    },
+    fb_info: (uinfo)=>{
+        try{
+            uinfo.id = parseInt(uinfo.id);
+            if(typeof uinfo.id !== 'number') return false;
+            if(getLength(uinfo.id)<10||getLength(uinfo.id)>50) return false;
+            if(getLength(uinfo.accessToken)<10||getLength(uinfo.accessToken)>1000) return false;
+            return true;
+        }catch(e){
+            return false;
+        }
+    },
+    FBsql : (id)=>{
+        return "SELECT * FROM tb_user WHERE fb_id = '" + id + "' LIMIT 1";
+    },
+    KEYsql: (user,key)=>{
+        return "UPDATE tb_user SET tb_user.key = '" + key + "' WHERE id = " + user.id + " AND user_name = '"+ user.user_name + "' LIMIT 1"; 
+    },
+    KEYloginsql : (key)=>{
+        return "SELECT * FROM tb_user WHERE tb_user.key = '" + key + "' LIMIT 1";
+    },
+    KEYloginsql2 : (key)=>{
+        return "UPDATE tb_user SET tb_user.key = '' WHERE tb_user.key = '" + key + "' LIMIT 1";
     }
 };
 let getLength = v => v.length;

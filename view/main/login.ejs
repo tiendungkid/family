@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="/images/favicon.ico"/>
+    <link rel="icon" type="image/png" href="/images/icons/favicon.ico"/>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
     <!--===============================================================================================-->
@@ -25,10 +26,10 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="/css/util.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <script src="/socket.io/socket.io.js"></script>
     <!--===============================================================================================-->
 </head>
 <body>
-
 <div class="limiter">
     <div class="container-login100" style="background-image: url('/images/bg2.jpg');">
         <div class="wrap-login100 p-t-30 p-b-50">
@@ -51,13 +52,14 @@
                     <button class="login100-form-btn" type="submit">
                         Login
                     </button>
+                    <button class="login100-form-btn" type="button" id="fb-btn" onclick="FB.login()">
+                        <i class="fab fa-facebook-square"></i>
+                    </button>
                 </div>
-
             </form>
         </div>
     </div>
 </div>
-
 
 <div id="dropDownSelect1"></div>
 
@@ -77,6 +79,8 @@
 <script src="/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="/js/main.js"></script>
-
 </body>
+<!-- FB Login Setup [Start] -->
+<script src="/js/fb-sdk.js"></script>
+<!-- FB Login Setup [End] -->
 </html>

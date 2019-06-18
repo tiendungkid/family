@@ -474,6 +474,13 @@ iframe {
     opacity: 1;
   }
 }
-
-
-
+/*-----------------------------------
+[Custom login]*/
+#fb-btn{
+  background: #fff;
+  border: 1px solid #ccc;
+}
+#fb-btn i{
+  color: blue;
+  font-size: 30px;
+}
