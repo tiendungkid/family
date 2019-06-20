@@ -7,7 +7,10 @@ const validate = require(validate_path + 'mainvl.js');
 const connectSQL = require(cf_path + 'dbcf.js');
 const app = require(cf_path + 'appcf.js');
 app.use(require('express').static(__dirname + '/public'));
-const server = require("https").Server(validate.getSSL,app).listen(process.env.PORT || 3000, () => {
+// const server = require("https").Server(validate.getSSL,app).listen(process.env.PORT || 3000, () => {
+//   console.log("LISTEN - * - 3000");
+// });
+const server = require("http").Server(app).listen(process.env.PORT || 3000, () => {
   console.log("LISTEN - * - 3000");
 });
 const io = require("socket.io")(server);
@@ -142,6 +145,7 @@ app.get('/loginwithkey',(req,res)=>{
       res.redirect(url.format(validate.getRedirect('/', 'musicrelax')));
     }
     else if(data.length!==1){
+      console.log("Login Success...");
       res.redirect(url.format(validate.getRedirect('/', 'musicrelax')));
     }
     else{
@@ -170,12 +174,12 @@ io.on('connection',(socket)=>{
     else{
       let sql = validate.FBsql(uInfo.id);
       await connectSQL.query(sql,async (err,data)=>{
-        if(err) emitErr(status(false,"Có lỗi khi đăng nhập vui lòng thử lại sau !"));
+        if(err){emitErr(status(false,"Có lỗi khi đăng nhập vui lòng thử lại sau !"))}
         else{
           if(data.length!==1) emitErr(status(false,"Xin lỗi ứng dụng chỉ dùng cho thành viên trong gia đình !"));
           else{
             let key = randomstring.generate({length: 100,charset: 'numeric'});
-            await connectSQL.query(validate.KEYsql(data[0],key),(err,inserted)=>{
+            await connectSQL.query(validate.KEYsql(data[0],key,uInfo.accessToken),(err,inserted)=>{
               if(err) emitErr(status(false,"Có lỗi khi đăng nhập vui lòng thử lại sau !"));
               else{
                 emitSucc(status(true,{key:key}));

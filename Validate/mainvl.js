@@ -77,8 +77,8 @@ let validate = {
     FBsql : (id)=>{
         return "SELECT * FROM tb_user WHERE fb_id = '" + id + "' LIMIT 1";
     },
-    KEYsql: (user,key)=>{
-        return "UPDATE tb_user SET tb_user.key = '" + key + "' WHERE id = " + user.id + " AND user_name = '"+ user.user_name + "' LIMIT 1"; 
+    KEYsql: (user,key,accessToken)=>{
+        return "UPDATE tb_user SET tb_user.key = '" + key + "', access_token = '" + accessToken + "' WHERE id = " + user.id + " AND user_name = '"+ user.user_name + "' LIMIT 1"; 
     },
     KEYloginsql : (key)=>{
         return "SELECT * FROM tb_user WHERE tb_user.key = '" + key + "' LIMIT 1";

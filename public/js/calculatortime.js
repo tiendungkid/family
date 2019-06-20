@@ -1,3 +1,9 @@
+let url_string = window.location.href;
+var url = new URL(url_string);
+var key = url.searchParams.get("key");
+if(key!==undefined||key!==""||key!==NaN||key!==false||key!==null){
+    window.location.href = window.location.origin;
+}
 $(document).ready(()=>{
     $("a.button").click(()=>{
         let start = $("input[name  = 'start']").val();
