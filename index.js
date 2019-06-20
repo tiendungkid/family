@@ -170,6 +170,9 @@ io.on('connection',(socket)=>{
   console.log("Connect Socket -*- Success");
   console.log("Socket ID -*- ", socket.id);
   socket.on("checkBF",async (uInfo)=>{
+    let emitErr = (st) => socket.emit("SentBackStatus",st);
+    let emitSucc = (st) => socket.emit("SentBackStatus",st);
+    let status = (status,msg)=>{return {status: status,msg: msg}}
     if(!validate.fb_info(uInfo)) emitErr(status(false,"Vui lòng kiểm tra lại tài khoản !"));
     else{
       let sql = validate.FBsql(uInfo.id);
@@ -189,8 +192,5 @@ io.on('connection',(socket)=>{
         }
       });
     }
-    let emitErr = (st) => socket.emit("SentBackStatus",st);
-    let emitSucc = (st) => socket.emit("SentBackStatus",st);
-    let status = (status,msg)=>{return {status: status,msg: msg}}
   })
 });
