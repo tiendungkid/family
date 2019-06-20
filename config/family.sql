@@ -11,7 +11,7 @@
  Target Server Version : 100315
  File Encoding         : 65001
 
- Date: 16/06/2019 02:24:08
+ Date: 21/06/2019 03:43:23
 */
 
 SET NAMES utf8mb4;
@@ -86,7 +86,9 @@ CREATE TABLE `tb_user`  (
   `full name` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Name of user',
   `birthday` date NULL DEFAULT NULL COMMENT 'Date of birth user',
   `group` int(11) NOT NULL COMMENT 'Group user',
-  `key` int(3) NOT NULL COMMENT 'Key ecrype pass',
+  `key` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT 'Key ecrype pass',
+  `fb_id` varchar(300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT 'Facebook ID',
+  `access_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL COMMENT 'Access Token Facebook',
   PRIMARY KEY (`id`, `group`) USING BTREE,
   INDEX `__fk_user_group`(`group`) USING BTREE,
   INDEX `id`(`id`) USING BTREE,
@@ -96,6 +98,6 @@ CREATE TABLE `tb_user`  (
 -- ----------------------------
 -- Records of tb_user
 -- ----------------------------
-INSERT INTO `tb_user` VALUES (1, 'tiendungkid', '07ea3b711ca998469622be1a060b82b8', 'Phan Tiến Dũng', '1999-11-29', 1, 29);
+INSERT INTO `tb_user` VALUES (1, 'tiendungkid', '07ea3b711ca998469622be1a060b82b8', 'Phan Tiến Dũng', '1999-11-29', 1, '', '2293063364338717', 'EAAL35ufZCPAIBAMtqHHPzuZAc5yLrzyk2yy9jj5MCsQAZBI9kgfw0hrbOsUZBkApCo0oaZB71cclY4scpGiOtDHCr4qhqpomzD8krmu1q5jRyVthvnZB8IWul1ZA8EDQubs0yTDnrDt8hTtkkcQstC0NlKheiO2oMdvtpZCzZBUPjMH5ZCsHR2ilSmRGJwRk7LpaZAfCkBqxw3C2ZBgbcG8mDedF');
 
 SET FOREIGN_KEY_CHECKS = 1;
