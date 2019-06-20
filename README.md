@@ -5,3 +5,4 @@ Dự án quản lý chi tiêu trong gia đình với nhiều chức năng
 + Thông báo sinh nhật của mọi người
 + Chia sẻ vị trí realtime
 + Nghe nhạc relax
++ Login with facebook (Family only)
